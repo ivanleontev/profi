@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+
+
+    <script id="entry-template" type="text/x-handlebars-template"></script>
+    <title>lchst</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col">
+                <h1 class="text-center mt-4 mb-4">Сокращение ссылок для {{results.name}}</h1>
+                <form class="mb-4" action="/shorten" method="post" onsubmit="return isNotLink()">
+                    <div class="form-row">
+                        <div class="col-7">
+                            <input type="text" class="form-control" name="large__link" id="link"
+                                placeholder="Ссылка, которую Вы хотите сократить">
+                        </div>
+                        <div class="col mb-2">
+                            <button type="submit" class="btn btn-primary">Сократить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center">
+            {{#each results}}
+            <div class="col-sm-12 mb-2">
+                <div class="card border-primary">
+                    <div class="card-body text-dark">
+
+                        <h5 class="card-title">
+                            <a href="{{small_key}}" target="_blank" id="link__copy"
+                                class="text-decoration-none alert-link">
+                                {{small_key}}
+                            </a>
+                        </h5>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-primary d-flex justify-content-center"
+                                data-clipboard-text="{{small_key}}">
+                                Скопировать
+                            </button>
+                        </div>
+                        <p class="card-text d-flex justify-content-between mb-0">
+                            <a href="{{large_link}}" target="_blank" class="text-decoration-none">
+                                {{large_link}}
+                            </a>
+                        </p>
+                        <p class="mb-0 d-flex justify-content-end font-weight-bold"> Переходов: {{stats}}</p>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    new ClipboardJS('.btn');
+
+    function isNotLink() {
+        var link = document.getElementById('link');
+        var reg = /^(ftp|http|https):\/\/[^ "]+$/;
+        if (!reg.test(link.value)) {
+            link.classList.add("is-invalid");
+            return false;
+        } else{
+            link.classList.remove("is-invalid");
+            return true;
+        }
+    }
+</script>
+
+</html>
